@@ -12025,4 +12025,9 @@ textarea.form-control-lg {
   color: black; /* Texto blanco al pasar el mouse */
 }
 
+
+#listaDoctores li::marker {
+  content: none; /* Elimina cualquier marcador explícito */
+}
+
 /*# sourceMappingURL=style.css.map */

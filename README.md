@@ -121,3 +121,49 @@ Cómo funciona:
     try: Intenta ejecutar el código dentro de este bloque.
     catch: Si ocurre un error dentro del bloque try, el flujo de ejecución se detiene y se pasa al bloque catch, donde se puede manejar el error.
     finally: Se ejecuta independientemente de si ocurrió o no un error, y es útil para tareas de limpieza.
+
+
+
+### Actualización Laboratorio 2
+
+Las estructuras utilizadas como base de almacenamiento fueron dos archivos json  ***medicos.json*** y ***citas.json***
+
+Funciones:
+1. Obtener Médicos : Mediante la función obtenerMedicos(), los datos de los médicos se cargan desde el archivo medicos.json     usando la API fetch.
+
+2. Mostrar Médicos: Una vez que los datos de los médicos son cargados correctamente, se procesan mediante la función mostrarMedicos(), que crea un listado de médicos en el HTML, mostrando detalles como su nombre, especialidad y horario de atención.
+
+
+### Carga y Procesamiento de Datos de Citas
+
+1. Obtener Citas: De manera similar a los médicos, las citas se cargan desde el archivo citas.json mediante la función fetchDatos(), que también incluye los datos de los médicos.
+
+2. Combinación de Datos: El sistema realiza una clonación y merge de los datos de citas y médicos. En primer lugar, se clona el arreglo de médicos (doctoresClonados = JSON.parse(JSON.stringify(doctores))) para evitar modificar el arreglo original. Luego, se combinan los datos de las citas con la información adicional de los médicos correspondientes mediante la operación de mapeo:
+```
+    const citasExtendidas = citas.citas.map((cita) => {
+        const doctor = doctores.find((doc) => doc.Id === cita.IdMedico);
+        return {
+            ...cita,
+            nombreMedico: doctor ? doctor.nombre : "Desconocido",
+            especialidad: doctor ? doctor.especialidad : "Desconocida"
+        };
+    });
+```
+Esto permite asociar cada cita con el nombre y especialidad del médico correspondiente, creando un objeto combinado con la información de las citas y los médicos.
+
+## Algoritmos y Complejidad
+
+Los algoritmos principales utilizados en este proyecto son los siguientes:
+
+    1. Búsqueda de Médico por ID: Para cada cita, se busca el médico correspondiente mediante el método .find() de los arreglos. Este algoritmo tiene una complejidad O(n), donde n es el número de médicos. Dado que este proceso se realiza dentro de un bucle que recorre las citas, la complejidad total para procesar todas las citas es O(m * n), donde m es el número de citas.
+
+    2. Clonación y Merge de Datos: La clonación de objetos mediante JSON.parse(JSON.stringify(...)) tiene una complejidad de O(n), donde n es el tamaño del objeto a clonar. El merge de citas y médicos también se realiza de manera eficiente mediante el uso de .map() y .find(), como se explicó anteriormente.
+
+    3. Recorrido de Arreglos: El uso de forEach() para recorrer y mostrar médicos y citas tiene una complejidad O(n), donde n es el tamaño del arreglo que se está recorriendo.
+
+En términos generales, el sistema realiza operaciones de tiempo lineal respecto al número de médicos y citas, lo cual es eficiente para la mayoría de los casos de uso.
+Flujo de Trabajo
+
+1. ***Carga de Datos***: Los datos de médicos y citas se cargan cuando se inicializa la página mediante la función obtenerMedicos() y fetchDatos().
+2. ***Interacción del Usuario***: Los usuarios pueden interactuar con el sistema solicitando citas médicas. La validación de datos del usuario (nombre, email y teléfono) se realiza mediante la función validarDatosUsuario(). Si los datos son válidos, se confirma la reserva mediante solicitarDatosUsuario().
+3. ***Visualización***: Se muestran las citas disponibles y los médicos en la interfaz utilizando el HTML dinámico generado por el JavaScript.
